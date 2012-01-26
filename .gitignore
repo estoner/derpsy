@@ -1,0 +1,11 @@
+config.rb
+rerun.txt
+.sass-cache
+.bundle
+*.rbc
+.redcar
+.DS_Store
+.idea/*
+*.orig
+chromedriver.log
+*.swp

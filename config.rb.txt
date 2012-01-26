@@ -1,0 +1,10 @@
+module Derpsy
+  def self.config
+    {
+      :login => "", 
+      :password => "",
+      :repo => "",
+      :branch => ""
+    }
+   end
+ end
