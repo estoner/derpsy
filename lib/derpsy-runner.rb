@@ -1,4 +1,4 @@
-require_relative "./derpsy"
+require_relative "lib/derpsy"
 require_relative "./config"
 
 # make this take parameters for login/pw
