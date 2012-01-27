@@ -1,7 +1,7 @@
 require "octokit"
-require "awesome_print"
 require_relative "./config.rb"
 require "logger"
+require "awesome_print"
 
 module Derpsy
   
@@ -78,8 +78,6 @@ module Derpsy
     def self.campfire
       Derpsy.logger.info "send notification to Campfire"
     end
-  #
-  # sleep 15
   # handle errors throughout
   #
   # overall structure:
