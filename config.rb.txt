@@ -4,7 +4,8 @@ module Derpsy
       :login => "", 
       :password => "",
       :repo => "",
-      :branch => ""
+      :branch => "",
+      :logfile => "~/derpsy.log"
     }
    end
  end

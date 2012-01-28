@@ -2,19 +2,19 @@ require "octokit"
 require_relative "../config.rb"
 require "logger"
 require "awesome_print"
-require "derpsy/retrieve"
-require "derpsy/repo"
-require "derpsy/test"
-require "derpsy/notify"
+require "./derpsy/retrieve"
+require "./derpsy/repo"
+require "./derpsy/test"
+require "./derpsy/notify"
 
 module Derpsy
   
+  def self.logger
+    @@logger = Logger.new(Derpsy.config[:logfile])
+  end
+  
   def self.client
     Octokit::Client.new :login => Derpsy.config[:login], :password => Derpsy.config[:password] 
-  end
-
-  def self.logger
-    @@logger = Logger.new("./derpsy.log")
   end
 
 end
