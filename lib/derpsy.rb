@@ -2,10 +2,10 @@ require "octokit"
 require_relative "../config.rb"
 require "logger"
 require "awesome_print"
-require "./derpsy/retrieve"
-require "./derpsy/repo"
-require "./derpsy/test"
-require "./derpsy/notify"
+require_relative "derpsy/retrieve"
+require_relative "derpsy/repo"
+require_relative "derpsy/test"
+require_relative "derpsy/notify"
 
 module Derpsy
   

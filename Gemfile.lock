@@ -29,6 +29,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   daemons
+  hashie
   minitest-emoji
   octokit
   rake
