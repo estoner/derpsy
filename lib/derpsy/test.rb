@@ -2,9 +2,39 @@ module Derpsy
 
   module Test
   
-    def self.setup
-      Derpsy.logger.info "bundle install"
-      # bundle install
+    def self.is_valid_repo?
+      msg = IO.popen("git rev-parse --git-dir").readlines.first
+      if msg == ".git\n"
+        true
+      else
+        false
+      end
+    end
+
+
+    def self.needs_bundle_install?
+      msg = IO.popen("bundle check").readlines.first
+      if msg == "The Gemfile's dependencies are satisfied\n"
+        true
+      else
+        false
+      end 
+    end 
+
+    def self.setup(pull, directory)
+      Dir.chdir(directory)
+
+      if Derpsy::Test.is_valid_repo? do
+      #   if repo, fetch and reset to hash
+      else
+      #   if not repo, clone
+      end
+
+      if Derpsy::Test.needs_bundle_install? do
+        IO.popen("bundle install")
+        # should really check for errors here
+      end
+      
     end
 
     def self.run
