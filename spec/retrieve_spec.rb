@@ -18,11 +18,11 @@ describe Derpsy::Retrieve do
   end
 
   it "must return an expected number of pulls from a known github repository" do
-
+    # will be sloooooow
   end
 
   it "must include comments in the pull results" do
-
+    # will be sloooooow
   end
 
   it "must return nil if there are no testable pull requests" do
