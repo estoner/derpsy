@@ -9,13 +9,11 @@ loop do
   pulls = Derpsy::Retrieve.all_pull_requests(client, repo)
   pull = Derpsy::Retrieve.testable_pull_request(pulls)
   if pull
-    repo = Derpsy::Repo.setup(repo)
-    Derpsy::Test.setup(repo)
-    results = Derpsy::Test.run(repo)
-    interpretation = Derpsy::Test.interpret(results)
-    Derpsy::Test.cleanup(repo)
-    message = Derpsy::Notify.build_message(interpretation)
-    Derpsy::Notify.comment(message)
+    localrepo = Derpsy::Test.setup(pull)
+    results = Derpsy::Test.run(localrepo)
+    Derpsy::Test.cleanup(localrepo)
+    message = Derpsy::Notify.build_message(results)
+    Derpsy::Notify.comment(pull, message)
     Derpsy::Notify.campfire(message)
   end
   sleep 15
