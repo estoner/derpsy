@@ -1,40 +1,26 @@
-require 'derpsy/pull'
+require_relative 'pull'
+require 'hashie/mash'
 
 module Derpsy
   
   module Retrieve
     
-    def self.all_pull_requests(client, repo)
-      Derpsy.logger.info "retrieve the pull requests"
-      pulls = client.pull_requests(repo)
-
-      pulls.each do |pull|
-        pull.discussion = client.pull(repo, pull.number).discussion
+    def self.pull_request(client, repo)
+      pull_list = client.pull_requests(repo)
+      pull_list.each do |p|
+        pull = client.pull(repo, p.number)
+        return pull if pull.mergeable && pull.discussion.last.type == "Commit"
       end
-
-      pulls.delete_if { |pull| pull.discussion.last.type != "Commit" }
-      
-      # arguably it's wasteful to init all of these when we only use one,
-      # but it makes it a little easier to mock in test
-
-      pulls.each do |pull|
-        id = pull.number
-        hash = pull.hash
-        repo = pull.repo
-        pull = Derpsy::Pull.new id, hash, repo
-      end
-
-      pulls
-
+      return false
     end
 
-    def self.testable_pull_request(pulls)
-      if pulls.length > 0
-        pulls[0]
-      else
-        nil
-      end
+    def self.modelify(pull)
+      id = pull.number
+      hash = pull.head.sha
+      repo = pull.head.repository.url
+      # should check what branch to merge onto
+      Derpsy::Pull.new id, hash, repo
     end
-  
+
   end
 end
