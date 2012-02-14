@@ -24,14 +24,14 @@ module Derpsy
     def self.setup(pull, directory)
       Dir.chdir(directory)
 
-      if Derpsy::Test.is_valid_repo? do
+      if Derpsy::Test.is_valid_repo?
       #   if repo, fetch and reset to hash
       else
       #   if not repo, clone
       end
 
-      if Derpsy::Test.needs_bundle_install? do
-        IO.popen("bundle install")
+      if Derpsy::Test.needs_bundle_install?
+        # IO.popen("bundle install")
         # should really check for errors here
       end
       
