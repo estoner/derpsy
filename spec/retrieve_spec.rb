@@ -29,8 +29,8 @@ describe Derpsy::Retrieve do
     Derpsy::Retrieve.testable_pull_request(@no_pulls).must_be_nil
   end
 
-  it "must return one Hashie::Mash if there is a testable pull request" do
-    Derpsy::Retrieve.testable_pull_request(@pulls).must_be_instance_of Hashie::Mash
+  it "must return one Derpsy::Pull if there is a testable pull request" do
+    Derpsy::Retrieve.testable_pull_request(@pulls).must_be_instance_of Derpsy::Pull
   end
 
 end
