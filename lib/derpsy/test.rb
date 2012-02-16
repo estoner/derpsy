@@ -21,13 +21,15 @@ module Derpsy
       end 
     end 
 
-    def self.setup(pull, directory)
-      Dir.chdir(directory)
+    def self.setup(pull, directory, upstream_repo)
+      Dir.mkdir directory if !Dir.exists? directory
+      Dir.chdir directory
 
       if Derpsy::Test.is_valid_repo?
       #   if repo, fetch and reset to hash
       else
-      #   if not repo, clone
+        msg = IO.popen("git clone #{upstream_repo}").readlines.first
+        # msg can pass an error
       end
 
       if Derpsy::Test.needs_bundle_install?
