@@ -5,8 +5,7 @@ module Derpsy
       :password => "",
       :repo => "",
       :branch => "",
-      :working_directory => "~/derpsy",
-      :logfile => "~/derpsy/derpsy.log"
+      :working_directory => "/home/somebody/derpsy"
     }
    end
  end

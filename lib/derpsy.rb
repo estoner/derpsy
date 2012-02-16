@@ -10,7 +10,7 @@ require_relative "derpsy/notify"
 module Derpsy
   
   def self.logger
-    @@logger = Logger.new(Derpsy.config[:logfile])
+    @@logger = Logger.new(Derpsy.config[:working_directory] + "/derpsy.log")
   end
   
   def self.client
