@@ -41,17 +41,22 @@ module Derpsy
       Dir.chdir repo_dir
 
       if Derpsy::Test.is_valid_repo?
-        #   if repo, fetch and reset to hash
+        `git pull`
       else
-        msg = IO.popen("git clone #{upstream_repo} .").readlines.first
+        `git clone #{upstream_repo} .`
         # msg can pass an error
       end
 
+      `git checkout -b merge`
+      `git pull #{pull.repo}`
+      puts `git log --pretty=format:'%h' -n 1`
+      # plenty of merge errors here
+
       if Derpsy::Test.needs_bundle_install? repo_dir
-        puts "needs bundle install"
         with_clean_env do
+          # this is currently fucked
           `bundle install --without compression`
-          # make the --without flag configuratble
+          # also, make the --without flag configuratble
         end
         # should really check for errors here
       end
@@ -67,12 +72,13 @@ module Derpsy
     def self.interpret
       Derpsy.logger.info "interpret the results"
       # figure out what the F the test results mean
+      # run other code metrics (simplecov, were there new tests, cane)
     end
 
     def self.cleanup
-      Derpsy.logger.info "clean up the repo"
-      # git checkout master
-      # git branch -D derp
+      # Derpsy.logger.info "clean up the repo"
+      `git checkout master`
+      `git branch -D merge`
     end
 
   end

@@ -8,15 +8,15 @@ describe Derpsy::Test do
 
   before do
     conf = Derpsy.config
-    pull = Derpsy::Pull.new(132, "005e9f32df3e39d4caf6bbe2abb892dd4f0620af", "https://github.com/estoner/rhapcom")
+    pull = Derpsy::Pull.new(132, "005e9f32df3e39d4caf6bbe2abb892dd4f0620af", "git@github.com:estoner/rhapcom.git")
     Derpsy::Test.setup(pull, conf[:working_directory], "git@github.com:#{conf[:repo]}.git" )
   end
 
   describe "when it sets up the test repo" do
 
     it "must be a valid repo" do
-      msg = IO.popen("git rev-parse --git-dir").readlines.first
-      msg.must_equal ".git\n"
+      `git rev-parse --git-dir`
+      $?.to_i.must_equal 0
     end
 
 #    it "must set the expected hash to HEAD" do
@@ -32,7 +32,7 @@ describe Derpsy::Test do
   end
   
   after do
-    
+    Derpsy::Test.cleanup    
   end
 
 end

@@ -17,7 +17,7 @@ module Derpsy
     def self.modelify(pull)
       id = pull.number
       hash = pull.head.sha
-      repo = pull.head.repository.url
+      repo = "git@github.com:#{pull.head.repository.owner}/rhapcom.git"
       # should check what branch to merge onto
       Derpsy::Pull.new id, hash, repo
     end
