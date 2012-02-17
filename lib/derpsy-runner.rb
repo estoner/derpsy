@@ -5,7 +5,7 @@ require_relative "../config"
 client = Derpsy.client
 repo = Derpsy.config[:repo]
 dir = Derpsy.config[:working_directory]
-upstream = "git://github.com#{repo}.git"
+upstream = "git@github.com:#{repo}.git"
 
 loop do
   pulls = Derpsy::Retrieve.all_pull_requests(client, repo)

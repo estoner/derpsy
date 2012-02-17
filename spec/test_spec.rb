@@ -9,8 +9,7 @@ describe Derpsy::Test do
   before do
     conf = Derpsy.config
     pull = Derpsy::Pull.new(132, "005e9f32df3e39d4caf6bbe2abb892dd4f0620af", "https://github.com/estoner/rhapcom")
-    Derpsy::Test.setup(pull, conf[:working_directory], conf[:upstream])
-    Dir.chdir(conf[:working_directory] + "/repo")
+    Derpsy::Test.setup(pull, conf[:working_directory], "git@github.com:#{conf[:repo]}.git" )
   end
 
   describe "when it sets up the test repo" do

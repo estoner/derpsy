@@ -1,5 +1,4 @@
 require 'minitest/autorun'
-require 'minitest/emoji'
 require 'derpsy/notify'
 
 describe Derpsy::Notify do
