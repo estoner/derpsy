@@ -1,7 +1,16 @@
-
 module Derpsy
 
   module Test
+
+    BUNDLER_VARS = %w(BUNDLE_GEMFILE RUBYOPT BUNDLE_BIN_PATH)
+
+    def self.with_clean_env
+      bundled_env = ENV.to_hash
+      BUNDLER_VARS.each{ |var| ENV.delete(var) }
+      yield
+    ensure
+      ENV.replace(bundled_env.to_hash)
+    end
   
     def self.is_valid_repo?
       msg = IO.popen("git rev-parse --git-dir").readlines.first
@@ -14,19 +23,16 @@ module Derpsy
 
 
     def self.needs_bundle_install?(dir)
-      puts "check the mother fucking bundle"
-      puts dir
-      Dir.chdir dir
-      puts "pwd: " + Dir.pwd
-      msg = IO.popen("bundle check").readlines.first
-      puts msg
-      if msg == "The Gemfile's dependencies are satisfied\n"
-        puts "twas false"
-        false
-      else
-        puts "twas true"
-        true
-      end 
+      with_clean_env do
+        Dir.chdir dir do
+          `bundle check`
+          if $?.to_i == 0
+            false
+          else
+            true
+          end 
+        end
+      end
     end 
 
     def self.setup(pull, directory, upstream_repo)
@@ -41,13 +47,14 @@ module Derpsy
         # msg can pass an error
       end
 
-      msg = IO.popen("cd #{repo_dir}; pwd").readlines.to_s
-      puts "FUCK" + msg
-#      if Derpsy::Test.needs_bundle_install? repo_dir
-#        puts "needs bundle install"
-#        IO.popen("bundle install")
-#        # should really check for errors here
-#      end
+      if Derpsy::Test.needs_bundle_install? repo_dir
+        puts "needs bundle install"
+        with_clean_env do
+          `bundle install --without compression`
+          # make the --without flag configuratble
+        end
+        # should really check for errors here
+      end
       
     end
 
