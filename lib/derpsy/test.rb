@@ -55,7 +55,7 @@ module Derpsy
       if Derpsy::Test.needs_bundle_install? repo_dir
         with_clean_env do
           # this is currently fucked
-          `bundle install --without compression`
+          `bundle install`
           # also, make the --without flag configuratble
         end
         # should really check for errors here
@@ -63,10 +63,16 @@ module Derpsy
       
     end
 
-    def self.run
-      Derpsy.logger.info "run the tests"
+    def self.run(test_cmd)
+      #Derpsy.logger.info "run the tests"
       # reruns.each do { [test cmd with no weird formatting] if pass then return "passed" }
       # if fail then return "failed"
+      `#{test_cmd}`
+      if $?.to_i == 0
+        return true
+      else
+        return false
+      end 
     end
 
     def self.interpret

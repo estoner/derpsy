@@ -5,6 +5,7 @@ module Derpsy
       :password => "",
       :repo => "",
       :branch => "",
+      :test_cmd => "rake",
       :working_directory => "/home/somebody/derpsy"
     }
    end

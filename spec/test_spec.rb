@@ -7,9 +7,9 @@ require_relative "../config.rb"
 describe Derpsy::Test do
 
   before do
-    conf = Derpsy.config
-    pull = Derpsy::Pull.new(132, "005e9f32df3e39d4caf6bbe2abb892dd4f0620af", "git@github.com:estoner/rhapcom.git")
-    Derpsy::Test.setup(pull, conf[:working_directory], "git@github.com:#{conf[:repo]}.git" )
+    @conf = Derpsy.config
+    pull = Derpsy::Pull.new(132, "005e9f32df3e39d4caf6bbe2abb892dd4f0620af", "git@github.com:estoner/acts_as_test_repository.git")
+    Derpsy::Test.setup(pull, @conf[:working_directory], "git@github.com:#{@conf[:repo]}.git" )
   end
 
   describe "when it sets up the test repo" do
@@ -29,6 +29,14 @@ describe Derpsy::Test do
 #      msg.must_equal "The Gemfile's dependencies are satisfied\n"
 #    end
 #
+  end
+
+  describe "when it runs the tests" do
+    
+    it "should pass passing tests" do
+      Derpsy::Test.run(@conf[:test_cmd]).must_equal true
+    end
+
   end
   
   after do
