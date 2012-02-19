@@ -50,8 +50,6 @@ module Derpsy
 
         `git checkout -b merge`
         `git pull #{pull.repo}`
-        puts "SHA! " + `git log --pretty=format:'%h' -n 1`
-        puts "rev! " + `git show-ref HEAD`
         # plenty of merge errors here
 
         if Derpsy::Test.needs_bundle_install? repo_dir
@@ -73,13 +71,9 @@ module Derpsy
       # reruns.each do { [test cmd with no weird formatting] if pass then return "passed" }
       # if fail then return "failed"
       Dir.chdir dir do
-        `#{test_cmd}`
+        output = `#{test_cmd}`
+        return [$?.to_i, output]
       end
-      if $?.to_i == 0
-        return true
-      else
-        return false
-      end 
     end
 
     def self.interpret

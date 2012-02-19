@@ -39,8 +39,9 @@ describe Derpsy::Test do
 
   describe "when it runs the tests" do
     
-    it "should pass passing tests" do
-      Derpsy::Test.run(@conf[:test_cmd], @conf[:working_directory]).must_equal true
+    it "get a zero status (i.e. passed) returned when running passing tests" do
+      status = Derpsy::Test.run(@conf[:test_cmd], @conf[:working_directory])[0]
+      status.must_equal 0
     end
 
   end
