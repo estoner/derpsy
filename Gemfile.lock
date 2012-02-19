@@ -11,6 +11,7 @@ GEM
     faraday_middleware (0.7.0)
       faraday (~> 0.7.3)
     hashie (1.2.0)
+    minitest (2.11.2)
     multi_json (1.0.4)
     multipart-post (1.1.4)
     octokit (0.6.5)
@@ -29,5 +30,6 @@ DEPENDENCIES
   awesome_print
   daemons
   hashie
+  minitest (~> 2.11.2)
   octokit
   rake

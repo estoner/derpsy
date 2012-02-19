@@ -17,11 +17,11 @@ describe Derpsy::Retrieve do
   end
 
   it "must produce the expected ID" do
-    @model.id.must_equal 132
+    @model.id.must_equal 1
   end
 
   it "must produce the expected hash" do
-    @model.hash.must_equal "005e9f32df3e39d4caf6bbe2abb892dd4f0620af"
+    @model.hash.must_equal "27f906b9d1e51855f085db4da6b96998d84c45f7"
   end
 
   it "must produce the expected repo URL" do

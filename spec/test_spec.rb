@@ -4,26 +4,32 @@ require 'minitest/mock'
 require 'derpsy/test'
 require_relative "../config.rb"
 
-describe Derpsy::Test do
+$setupconf = Derpsy.config
+pull = Derpsy::Pull.new(132, "27f906b9d1e51855f085db4da6b96998d84c45f7", "git@github.com:estoner/acts_as_test_repository.git")
+Derpsy::Test.setup(pull, $setupconf[:working_directory], "git@github.com:#{$setupconf[:repo]}.git" )
 
+describe Derpsy::Test do
   before do
     @conf = Derpsy.config
-    pull = Derpsy::Pull.new(132, "005e9f32df3e39d4caf6bbe2abb892dd4f0620af", "git@github.com:estoner/acts_as_test_repository.git")
-    Derpsy::Test.setup(pull, @conf[:working_directory], "git@github.com:#{@conf[:repo]}.git" )
+    @pwd = @conf[:working_directory] + "/repo"
   end
 
   describe "when it sets up the test repo" do
 
     it "must be a valid repo" do
-      `git rev-parse --git-dir`
-      $?.to_i.must_equal 0
+      Dir.chdir @pwd do
+        `git rev-parse --git-dir`
+        $?.to_i.must_equal 0
+      end
     end
 
-#    it "must set the expected hash to HEAD" do
-#      hash = IO.popen("git show-ref HEAD").readlines[0].split(" ").first
-#      hash.must_equal "89adf24e940ac8b22da6f0da52e57d55bc5b7848"
-#    end
-#
+    it "must set the expected hash to HEAD" do
+      Dir.chdir @pwd do
+        hash = `git log --pretty=format:'%h' -n 1`
+        hash.must_equal "27f906b"
+      end
+    end
+
 #    it "must have the correct bundle installed" do
 #      msg = IO.popen("bundle check").readlines.first
 #      msg.must_equal "The Gemfile's dependencies are satisfied\n"
@@ -34,13 +40,14 @@ describe Derpsy::Test do
   describe "when it runs the tests" do
     
     it "should pass passing tests" do
-      Derpsy::Test.run(@conf[:test_cmd]).must_equal true
+      Derpsy::Test.run(@conf[:test_cmd], @conf[:working_directory]).must_equal true
     end
 
   end
-  
-  after do
-    Derpsy::Test.cleanup    
+
+  MiniTest::Unit.after_tests do
+    Derpsy::Test.cleanup $setupconf[:working_directory]
   end
 
 end
+  

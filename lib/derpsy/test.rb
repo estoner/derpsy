@@ -38,36 +38,43 @@ module Derpsy
     def self.setup(pull, directory, upstream_repo)
       repo_dir = directory + "/repo"
       FileUtils.mkdir_p repo_dir
-      Dir.chdir repo_dir
+      
+      Dir.chdir repo_dir do
 
-      if Derpsy::Test.is_valid_repo?
-        `git pull`
-      else
-        `git clone #{upstream_repo} .`
-        # msg can pass an error
-      end
-
-      `git checkout -b merge`
-      `git pull #{pull.repo}`
-      puts `git log --pretty=format:'%h' -n 1`
-      # plenty of merge errors here
-
-      if Derpsy::Test.needs_bundle_install? repo_dir
-        with_clean_env do
-          # this is currently fucked
-          `bundle install`
-          # also, make the --without flag configuratble
+        if Derpsy::Test.is_valid_repo?
+          `git pull`
+        else
+          `git clone #{upstream_repo} .`
+          # msg can pass an error
         end
-        # should really check for errors here
+
+        `git checkout -b merge`
+        `git pull #{pull.repo}`
+        puts "SHA! " + `git log --pretty=format:'%h' -n 1`
+        puts "rev! " + `git show-ref HEAD`
+        # plenty of merge errors here
+
+        if Derpsy::Test.needs_bundle_install? repo_dir
+          with_clean_env do
+            # this is currently fucked
+            `bundle install`
+            # also, make the --without flag configuratble
+          end
+          # should really check for errors here
+        end
+
       end
       
     end
 
-    def self.run(test_cmd)
+    def self.run(test_cmd, dir)
+      dir = dir + "/repo"
       #Derpsy.logger.info "run the tests"
       # reruns.each do { [test cmd with no weird formatting] if pass then return "passed" }
       # if fail then return "failed"
-      `#{test_cmd}`
+      Dir.chdir dir do
+        `#{test_cmd}`
+      end
       if $?.to_i == 0
         return true
       else
@@ -81,10 +88,13 @@ module Derpsy
       # run other code metrics (simplecov, were there new tests, cane)
     end
 
-    def self.cleanup
+    def self.cleanup(directory)
+      repo_dir = directory + "/repo"
       # Derpsy.logger.info "clean up the repo"
-      `git checkout master`
-      `git branch -D merge`
+      Dir.chdir repo_dir do
+        `git checkout master`
+        `git branch -D merge`
+      end
     end
 
   end
