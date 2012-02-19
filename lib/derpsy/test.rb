@@ -72,7 +72,9 @@ module Derpsy
       # if fail then return "failed"
       Dir.chdir dir do
         output = `#{test_cmd}`
-        return [$?.to_i, output]
+        return { status: $?.to_i, 
+                 output: output 
+               }
       end
     end
 
