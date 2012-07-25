@@ -30,11 +30,11 @@ describe Derpsy::Test do
       end
     end
 
-#    it "must have the correct bundle installed" do
-#      msg = IO.popen("bundle check").readlines.first
-#      msg.must_equal "The Gemfile's dependencies are satisfied\n"
-#    end
-#
+    it "must have the correct bundle installed" do
+      msg = IO.popen("bundle check").readlines.first
+      msg.must_equal "The Gemfile's dependencies are satisfied\n"
+    end
+
   end
 
   describe "when it runs the tests" do
