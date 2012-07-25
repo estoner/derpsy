@@ -14,7 +14,7 @@ desc "Regenerate fixtures"
 task :fixtures do
   require_relative 'lib/derpsy'
   require_relative 'lib/derpsy/retrieve'
-  pull_file = "spec/fixtures/pulls.marshal"
+  pull_file = "spec/fixtures/pulls-fail.marshal"
   File.delete(pull_file)
   pull = Derpsy::Retrieve.pull_request(Derpsy.client, Derpsy.config[:repo])
   ap pull
