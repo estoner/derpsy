@@ -26,7 +26,7 @@ describe Derpsy::Test do
     it "must set the expected hash to HEAD" do
       Dir.chdir @pwd do
         hash = `git log --pretty=format:'%h' -n 1`
-        hash.must_equal "27f906b"
+        hash.must_equal "446aa6a"
       end
     end
 
