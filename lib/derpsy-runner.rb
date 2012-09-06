@@ -1,5 +1,5 @@
-require_relative "./derpsy"
-require_relative "../config"
+require File.expand_path('../derpsy', __FILE__)
+require File.expand_path('../../config', __FILE__)
 
 # make this take parameters for login/pw
 client = Derpsy.client
@@ -10,7 +10,8 @@ upstream = "git@github.com:#{repo}.git"
 
 loop do
   puts 'getting pull requests'
-  pull = Derpsy::Retrieve.pull_request(client, repo)
+  raw_pull = Derpsy::Retrieve.pull_request(client, repo)
+  pull = Derpsy::Retrieve.modelify(raw_pull)
   #pull = Derpsy::Retrieve.testable_pull_request(pulls)
   if pull
     puts 'got a pull request'
@@ -23,9 +24,9 @@ loop do
     puts 'assembling notification message'
     message = Derpsy::Notify.build_message(results)
     puts 'notifying github'
-    Derpsy::Notify.comment(pull, message)
+    Derpsy::Notify.comment(pull, message, config)
     puts 'notifying campfire'
-    Derpsy::Notify.campfire(message)
+    Derpsy::Notify.campfire(pull, message, config)
   end
   sleep 15
 end

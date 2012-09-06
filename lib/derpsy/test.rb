@@ -25,8 +25,14 @@ module Derpsy
     def self.needs_bundle_install?(dir)
       with_clean_env do
         Dir.chdir dir do
-          `bundle check`
-          if $?.to_i == 0
+          #check = `RBENV_DIR="" rbenv exec bundle check`
+          check = `bundle check`
+          status = $?.to_i 
+          puts "check:"
+          ap check
+          puts "status:"
+          ap status
+          if status == 0
             false
           else
             true
@@ -57,7 +63,8 @@ module Derpsy
           with_clean_env do
             # this is currently fucked
             puts "installing bundle"
-            `RBENV_DIR="" rbenv exec bundle install`
+            #`RBENV_DIR="" rbenv exec bundle install`
+            `bundle install`
             # also, make the --without flag configuratble
           end
           # should really check for errors here
@@ -75,7 +82,8 @@ module Derpsy
       Dir.chdir dir do
 
         # for some reason the bundle exec isn't working, grrr
-        output = `RBENV_DIR="" rbenv exec #{test_cmd}`
+        #output = `RBENV_DIR="" rbenv exec #{test_cmd}`
+        output = `#{test_cmd}`
         return { status: $?.to_i, 
                  output: output 
                }
