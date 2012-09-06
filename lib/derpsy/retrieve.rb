@@ -9,7 +9,9 @@ module Derpsy
       pull_list = client.pull_requests(repo)
       pull_list.each do |p|
         pull = client.pull(repo, p.number)
-        return pull if pull.mergeable && pull.discussion.last.type == "Commit"
+        commits = client.pull_request_commits(repo, pull.number)
+        last_status = client.statuses(repo, commits.last.sha)
+        return pull if pull.mergeable && last_status.length == 0
       end
       return false
     end

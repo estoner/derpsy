@@ -35,7 +35,7 @@ module Derpsy
       end
     end 
 
-    def self.setup(pull, directory, upstream_repo)
+    def self.setup(pull, directory, upstream_repo, branch="master")
       repo_dir = directory + "/repo"
       FileUtils.mkdir_p repo_dir
       
@@ -47,15 +47,16 @@ module Derpsy
           `git clone #{upstream_repo} .`
           # msg can pass an error
         end
-
         `git checkout -b merge`
-        `git pull #{pull.repo}`
+        puts "pulling ssh url"
+        `git pull #{pull.head.repo.ssh_url} #{branch}`
         # plenty of merge errors here
 
         if Derpsy::Test.needs_bundle_install? repo_dir
           with_clean_env do
             # this is currently fucked
-            `bundle install`
+            puts "installing bundle"
+            `RBENV_DIR="" rbenv exec bundle install`
             # also, make the --without flag configuratble
           end
           # should really check for errors here
@@ -71,7 +72,9 @@ module Derpsy
       # reruns.each do { [test cmd with no weird formatting] if pass then return "passed" }
       # if fail then return "failed"
       Dir.chdir dir do
-        output = `#{test_cmd}`
+
+        # for some reason the bundle exec isn't working, grrr
+        output = `RBENV_DIR="" rbenv exec #{test_cmd}`
         return { status: $?.to_i, 
                  output: output 
                }
