@@ -1,5 +1,6 @@
 require_relative 'pull'
 require 'hashie/mash'
+require 'awesome_print'
 
 module Derpsy
   
@@ -19,7 +20,8 @@ module Derpsy
     def self.modelify(pull)
       id = pull.number
       hash = pull.head.sha
-      repo = "git@github.com:#{pull.head.repository.owner}/rhapcom.git"
+      repo = pull.head.repository.ssh_url
+      # branch = pull.head.ref
       # should check what branch to merge onto
       Derpsy::Pull.new id, hash, repo
     end

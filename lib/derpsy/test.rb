@@ -49,7 +49,8 @@ module Derpsy
         end
         `git checkout -b merge`
         puts "pulling ssh url"
-        `git pull #{pull.head.repo.ssh_url} #{branch}`
+        puts "git pull #{pull.repo} #{branch}"
+        `git pull #{pull.repo} #{branch}`
         # plenty of merge errors here
 
         if Derpsy::Test.needs_bundle_install? repo_dir
