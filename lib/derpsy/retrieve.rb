@@ -20,7 +20,7 @@ module Derpsy
     def self.modelify(pull)
       id = pull.number
       hash = pull.head.sha
-      repo = pull.head.repository.ssh_url
+      repo = pull.head.repo.ssh_url
       # branch = pull.head.ref
       # should check what branch to merge onto
       Derpsy::Pull.new id, hash, repo

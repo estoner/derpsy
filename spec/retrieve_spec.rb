@@ -17,16 +17,15 @@ describe Derpsy::Retrieve do
   end
 
   it "must produce the expected ID" do
-    @model.id.must_equal 1
+    @model.id.must_equal 2
   end
 
   it "must produce the expected hash" do
-    @model.hash.must_equal "27f906b9d1e51855f085db4da6b96998d84c45f7"
+    @model.hash.must_equal "511b839072fd8b101c095001ba0c44532f4a0cda"
   end
 
   it "must produce the expected repo URL" do
-    ap @model
-    @model.repo.must_equal "git@github.com:estoner/rhapcom.git"
+    @model.repo.must_equal "git@github.com:estoner/acts_as_test_repository.git"
   end
 
 end
