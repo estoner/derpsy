@@ -2,7 +2,7 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'minitest/mock'
 require 'derpsy/test'
-require_relative "../config.rb"
+require File.expand_path('../../config', __FILE__)
 
 $setupconf = Derpsy.config
 pull = Derpsy::Pull.new(132, "27f906b9d1e51855f085db4da6b96998d84c45f7", "git@github.com:estoner/acts_as_test_repository.git")

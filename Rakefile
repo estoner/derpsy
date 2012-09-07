@@ -15,11 +15,10 @@ end
 
 desc "Regenerate fixtures"
 task :fixtures do
-  require_relative 'lib/derpsy'
-  require_relative 'lib/derpsy/retrieve'
+  require File.expand_path('../lib/derpsy', __FILE__)
+  require File.expand_path('../lib/derpsy/retrieve', __FILE__)
   pull_file = "spec/fixtures/pulls-fail.marshal"
   File.delete(pull_file)
   pull = Derpsy::Retrieve.pull_request(Derpsy.client, Derpsy.config[:repo])
-  ap pull
   File.open(pull_file, "wb") {|file| Marshal.dump(pull, file)}
 end

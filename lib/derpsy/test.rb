@@ -23,7 +23,7 @@ module Derpsy
 
 
     def self.needs_bundle_install?(dir)
-      with_clean_env do
+      Bundler.with_clean_env do
         Dir.chdir dir do
           #check = `RBENV_DIR="" rbenv exec bundle check`
           check = `bundle check`
@@ -60,7 +60,7 @@ module Derpsy
         # plenty of merge errors here
 
         if Derpsy::Test.needs_bundle_install? repo_dir
-          with_clean_env do
+          Bundler.with_clean_env do
             # this is currently fucked
             puts "installing bundle"
             #`RBENV_DIR="" rbenv exec bundle install`
@@ -79,21 +79,29 @@ module Derpsy
       #Derpsy.logger.info "run the tests"
       # reruns.each do { [test cmd with no weird formatting] if pass then return "passed" }
       # if fail then return "failed"
-      Dir.chdir dir do
+      Bundler.with_clean_env do
+        Dir.chdir dir do
 
-        # for some reason the bundle exec isn't working, grrr
-        #output = `RBENV_DIR="" rbenv exec #{test_cmd}`
-        output = `#{test_cmd}`
-        return { status: $?.to_i, 
-                 output: output 
-               }
+          # for some reason the bundle exec isn't working, grrr
+          #output = `RBENV_DIR="" rbenv exec #{test_cmd}`
+          fuckput = `pwd`
+          puts "PWD: #{fuckput}"
+          output = `#{test_cmd}`
+          return { :status => $?.to_i, 
+                   :output => output 
+                 }
+        end
       end
     end
 
-    def self.interpret
+    def self.interpret(results)
       Derpsy.logger.info "interpret the results"
+
       # figure out what the F the test results mean
+      Derpsy.logger.info "results were: #{results[:status]}"
+
       # run other code metrics (simplecov, were there new tests, cane)
+      return results
     end
 
     def self.cleanup(directory)
@@ -102,6 +110,7 @@ module Derpsy
       Dir.chdir repo_dir do
         `git checkout master`
         `git branch -D merge`
+        `rm -rf deployed_app`
       end
     end
 

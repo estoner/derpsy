@@ -1,11 +1,11 @@
 require "octokit"
-require_relative "../config.rb"
+require File.expand_path('../../config', __FILE__)
 require "logger"
 require "awesome_print"
-require_relative "derpsy/retrieve"
-require_relative "derpsy/repo"
-require_relative "derpsy/test"
-require_relative "derpsy/notify"
+require File.expand_path('../derpsy/retrieve', __FILE__)
+require File.expand_path('../derpsy/repo', __FILE__)
+require File.expand_path('../derpsy/test', __FILE__)
+require File.expand_path('../derpsy/notify', __FILE__)
 
 module Derpsy
   

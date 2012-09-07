@@ -14,17 +14,27 @@ loop do
   pull = Derpsy::Retrieve.modelify(raw_pull)
   #pull = Derpsy::Retrieve.testable_pull_request(pulls)
   if pull
+
     puts 'got a pull request'
+
     puts 'setting up tests'
     localrepo = Derpsy::Test.setup(pull, dir, upstream)
+
     puts 'running tests'
     results = Derpsy::Test.run(config[:test_cmd], dir)
+
     puts 'cleaning up tests'
     Derpsy::Test.cleanup(dir)
+
+    puts 'interpreting results'
+    interpreted_results = Derpsy::Test.interpret(results)
+
     puts 'assembling notification message'
-    message = Derpsy::Notify.build_message(results)
+    message = Derpsy::Notify.build_message(interpreted_results)
+
     puts 'notifying github'
     Derpsy::Notify.comment(pull, message, config)
+
     puts 'notifying campfire'
     Derpsy::Notify.campfire(pull, message, config)
   end

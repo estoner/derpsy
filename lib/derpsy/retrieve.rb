@@ -1,4 +1,4 @@
-require_relative 'pull'
+require File.expand_path('../pull', __FILE__)
 require 'hashie/mash'
 require 'awesome_print'
 
@@ -7,7 +7,7 @@ module Derpsy
   module Retrieve
     
     def self.pull_request(client, repo)
-      pull_list = client.pull_requests(repo)
+      pull_list = client.pull_requests(repo).reverse
       pull_list.each do |p|
         pull = client.pull(repo, p.number)
         commits = client.pull_request_commits(repo, pull.number)
