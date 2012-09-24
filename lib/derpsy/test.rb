@@ -48,9 +48,11 @@ module Derpsy
       Dir.chdir repo_dir do
 
         if Derpsy::Test.is_valid_repo?
+          `git reset --hard HEAD`
           `git checkout master`
-          `git pull`
+          `git branch -D merge`
           `rm -rf deployed_app/`
+          `git pull`
         else
           `git clone #{upstream_repo} .`
           # msg can pass an error
@@ -67,7 +69,7 @@ module Derpsy
             puts "installing bundle"
             #`RBENV_DIR="" rbenv exec bundle install`
             `bundle install`
-            # also, make the --without flag configuratble
+            # also, make the --without flag configurable
           end
           # should really check for errors here
         end
@@ -86,11 +88,10 @@ module Derpsy
 
           # for some reason the bundle exec isn't working, grrr
           #output = `RBENV_DIR="" rbenv exec #{test_cmd}`
-          fuckput = `pwd`
-          puts "PWD: #{fuckput}"
-          output = `#{test_cmd}`
+          full_output = `#{test_cmd}`
+          rerun = File.readlines('rerun.txt')[0]
           return { :status => $?.to_i, 
-                   :output => output 
+                   :output => rerun 
                  }
         end
       end
