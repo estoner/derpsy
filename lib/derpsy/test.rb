@@ -48,7 +48,9 @@ module Derpsy
       Dir.chdir repo_dir do
 
         if Derpsy::Test.is_valid_repo?
+          `git checkout master`
           `git pull`
+          `rm -rf deployed_app/`
         else
           `git clone #{upstream_repo} .`
           # msg can pass an error
@@ -99,6 +101,7 @@ module Derpsy
 
       # figure out what the F the test results mean
       Derpsy.logger.info "results were: #{results[:status]}"
+      Derpsy.logger.info "output was: #{results[:output]}"
 
       # run other code metrics (simplecov, were there new tests, cane)
       return results
