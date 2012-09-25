@@ -33,7 +33,7 @@ loop do
     message = Derpsy::Notify.build_message(interpreted_results)
 
     puts 'notifying github'
-    Derpsy::Notify.comment(pull, message, config)
+    Derpsy::Notify.github(pull, message, config)
 
     puts 'notifying campfire'
     Derpsy::Notify.campfire(pull, message, config)

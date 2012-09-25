@@ -97,11 +97,20 @@ module Derpsy
       end
     end
 
-    def self.interpret(results)
+    def self.interpret(data)
       Derpsy.logger.info "interpret the results"
+      
+      results = { :success => false, :output => data[:output] }
 
       # figure out what the F the test results mean
-      Derpsy.logger.info "results were: #{results[:status]}"
+      Derpsy.logger.info "status was: #{data[:status]}"
+      Derpsy.logger.info "output was: #{data[:output]}"
+
+      if data[:status] == 0
+        results[:success] = true
+      end
+
+      Derpsy.logger.info "results were: #{results[:status].to_s}"
       Derpsy.logger.info "output was: #{results[:output]}"
 
       # run other code metrics (simplecov, were there new tests, cane)
