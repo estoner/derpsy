@@ -26,14 +26,12 @@ module Derpsy
       Derpsy.logger.info "post comment to GitHub"
       desc = ""
       if message[:status] == "failure"
-        desc = "DERP!!1! Tests which failed: #{message[:text]}"
+        desc = "on the following tests: #{message[:text]}"
       end
       begin
         response = client.create_status(pull.short_repo, pull.hash, message[:status], options = { :description => desc})
-        ap response
       rescue StandardError => boom
-        puts "EROR!"
-        ap boom
+        Derpsy.logger.info "EROR when attempting to notify github: #{boom}"
       end
       # check response to make sure it worked
       #   if failed, maybe close request?
@@ -41,12 +39,12 @@ module Derpsy
 
     def self.campfire(pull, message, config, room)
       Derpsy.logger.info "send notification to Campfire"
-      room.speak "Derpsy has analyzed #{pull.user}'s pull request '#{pull.title}'"
+      room.speak "Derpsy has analyzed #{pull.user}'s pull request '#{pull.title}'..."
       if message[:status] == "success"
         room.speak ":sparkles: :heart: It passes! :heart: :sparkles: Please code review and merge: #{pull.web_url.href}"
       elsif message[:status] == "failure"
         room.speak ":fire: :poop: It is borked! :poop: :fire: Failures on #{message[:text]}"
-        room.speak "Please do not merge it unless you have determined conclusively that this is an environment issue."
+        room.speak "Please do not merge, unless you have determined conclusively that this is an environment issue."
       else
         room.speak "Whoops! Derpsy had some kind of internal derp of its own. Ask Evan to fix that."
       end

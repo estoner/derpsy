@@ -28,10 +28,6 @@ module Derpsy
           #check = `RBENV_DIR="" rbenv exec bundle check`
           check = `bundle check`
           status = $?.to_i 
-          puts "check:"
-          ap check
-          puts "status:"
-          ap status
           if status == 0
             false
           else
@@ -60,15 +56,12 @@ module Derpsy
           # msg can pass an error
         end
         `git checkout -b merge`
-        puts "pulling ssh url"
-        puts "git pull #{pull.repo} #{branch}"
         `git pull #{pull.repo} #{branch}`
         # plenty of merge errors here
 
         if Derpsy::Test.needs_bundle_install? repo_dir
           Bundler.with_clean_env do
             # this is currently fucked
-            puts "installing bundle"
             #`RBENV_DIR="" rbenv exec bundle install`
             `bundle install`
             # also, make the --without flag configurable
@@ -97,9 +90,24 @@ module Derpsy
           full_output = `#{test_cmd}`
           #full_output = `ruby /Users/estoner/pixies-derpsy/fail.rb`
           #full_output = `ruby /Users/estoner/pixies-derpsy/pass.rb`
-          rerun = File.readlines('deployed_app/rerun.txt')[0]
-          return { :status => $?.to_i, 
-                   :output => rerun 
+          status = $?.to_i
+          2.times do |i|
+            if status != 0
+              rerun = File.readlines('deployed_app/rerun.txt')[0]
+              Derpsy.logger.info "tests failed on #{rerun}"
+              Derpsy.logger.info "performing rerun ##{i}"
+              full_output = `#{test_cmd}`
+              status = $?.to_i
+            end
+          end
+          if status != 0
+            message = File.readlines('deployed_app/rerun.txt')[0]
+            Derpsy.logger.info "tests failed on final rerun: #{message}"
+          else
+            message = ""
+          end
+          return { :status => status,
+                   :output => message
                  }
         end
       end

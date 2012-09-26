@@ -12,9 +12,7 @@ module Derpsy
       pull_list.each do |p|
         pull = client.pull(repo, p.number)
         commits = client.pull_request_commits(repo, pull.number)
-        ap commits.last.sha
         last_status = client.statuses(pull.head.repo.full_name, commits.last.sha)
-        ap last_status
         return pull if pull.mergeable && last_status.length == 0
       end
       return false

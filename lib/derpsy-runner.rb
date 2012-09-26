@@ -10,34 +10,17 @@ dir = config[:working_directory]
 upstream = "git@github.com:#{repo}.git"
 
 loop do
-  puts 'getting pull requests'
   raw_pull = Derpsy::Retrieve.pull_request(client, repo)
   if raw_pull
     pull = Derpsy::Retrieve.modelify(raw_pull)
     #pull = Derpsy::Retrieve.testable_pull_request(pulls)
     if pull
-
-      puts 'got a pull request'
-
-      puts 'setting up tests'
       localrepo = Derpsy::Test.setup(pull, dir, upstream)
-
-      puts 'running tests'
       results = Derpsy::Test.run(config[:test_cmd], dir)
-
-      puts 'cleaning up tests'
       Derpsy::Test.cleanup(dir)
-
-      puts 'interpreting results'
       interpreted_results = Derpsy::Test.interpret(results)
-
-      puts 'assembling notification message'
       message = Derpsy::Notify.build_message(interpreted_results)
-
-      puts 'notifying github'
       Derpsy::Notify.github(pull, message, config, client)
-
-      puts 'notifying campfire'
       Derpsy::Notify.campfire(pull, message, config, campfire_room)
     end
   end
