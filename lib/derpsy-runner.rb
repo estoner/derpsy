@@ -1,5 +1,6 @@
 require File.expand_path('../derpsy', __FILE__)
 require File.expand_path('../../config', __FILE__)
+require 'fileutils'
 
 # make this take parameters for login/pw
 client = Derpsy.client
@@ -7,6 +8,7 @@ config = Derpsy.config
 campfire_room = Derpsy.campfire_room
 repo = config[:repo]
 dir = config[:working_directory]
+FileUtils.mkdir_p repo_dir
 upstream = "https://github.com/#{repo}"
 
 loop do
