@@ -1,4 +1,5 @@
 require "octokit"
+require "tinder"
 require File.expand_path('../../config', __FILE__)
 require "logger"
 require "awesome_print"
@@ -14,9 +15,13 @@ module Derpsy
   end
   
   def self.client
-    Octokit::Client.new :login => Derpsy.config[:login], :password => Derpsy.config[:password] 
+    Octokit::Client.new :login => Derpsy.config[:login], :oauth_token => Derpsy.config[:oauth_token]
   end
 
+  def self.campfire_room
+    campfire = Tinder::Campfire.new Derpsy.config[:campfire_subdomain], :token => Derpsy.config[:campfire_token]
+    room = campfire.find_room_by_name Derpsy.config[:campfire_room_name]
+  end
 end
 
 # handle errors throughout

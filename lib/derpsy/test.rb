@@ -42,6 +42,8 @@ module Derpsy
     end 
 
     def self.setup(pull, directory, upstream_repo, branch="master")
+
+      Derpsy.logger.info "setting up local repo"
       repo_dir = directory + "/repo"
       FileUtils.mkdir_p repo_dir
       
@@ -80,7 +82,11 @@ module Derpsy
 
     def self.run(test_cmd, dir)
       dir = dir + "/repo"
-      #Derpsy.logger.info "run the tests"
+
+      # consider setting status of pull to "pending"
+      # Octokit::Client::Status.create_status(pull.repo, pull.hash, "pending", options = { :description => "Derpsy is reviewing your change for derps."})
+
+      Derpsy.logger.info "running tests"
       # reruns.each do { [test cmd with no weird formatting] if pass then return "passed" }
       # if fail then return "failed"
       Bundler.with_clean_env do
@@ -89,7 +95,9 @@ module Derpsy
           # for some reason the bundle exec isn't working, grrr
           #output = `RBENV_DIR="" rbenv exec #{test_cmd}`
           full_output = `#{test_cmd}`
-          rerun = File.readlines('rerun.txt')[0]
+          #full_output = `ruby /Users/estoner/pixies-derpsy/fail.rb`
+          #full_output = `ruby /Users/estoner/pixies-derpsy/pass.rb`
+          rerun = File.readlines('deployed_app/rerun.txt')[0]
           return { :status => $?.to_i, 
                    :output => rerun 
                  }
@@ -98,7 +106,7 @@ module Derpsy
     end
 
     def self.interpret(data)
-      Derpsy.logger.info "interpret the results"
+      Derpsy.logger.info "interpreting results"
       
       results = { :success => false, :output => data[:output] }
 
@@ -110,7 +118,7 @@ module Derpsy
         results[:success] = true
       end
 
-      Derpsy.logger.info "results were: #{results[:status].to_s}"
+      Derpsy.logger.info "results were: #{results[:success].to_s}"
       Derpsy.logger.info "output was: #{results[:output]}"
 
       # run other code metrics (simplecov, were there new tests, cane)
@@ -119,7 +127,7 @@ module Derpsy
 
     def self.cleanup(directory)
       repo_dir = directory + "/repo"
-      # Derpsy.logger.info "clean up the repo"
+      # Derpsy.logger.info "cleaning local repo"
       Dir.chdir repo_dir do
         `git checkout master`
         `git branch -D merge`

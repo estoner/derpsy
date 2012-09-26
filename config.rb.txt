@@ -1,12 +1,16 @@
 module Derpsy
   def self.config
     {
-      :login => "", 
-      :password => "",
-      :repo => "",
-      :branch => "",
+      :login => "joe_username", 
+      :password => "12345",
+      :oauth_token => "123412341234",
+      :repo => "somebody/some_project",
+      :branch => "master",
       :test_cmd => "rake",
-      :working_directory => "/home/somebody/derpsy"
+      :working_directory => "/home/somebody/derpsy",
+      :campfire_token => "",
+      :campfire_subdomain => "",
+      :campfire_room_name => ""
     }
    end
  end
