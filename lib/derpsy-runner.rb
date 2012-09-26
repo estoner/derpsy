@@ -8,7 +8,7 @@ config = Derpsy.config
 campfire_room = Derpsy.campfire_room
 repo = config[:repo]
 dir = config[:working_directory]
-FileUtils.mkdir_p repo_dir
+FileUtils.mkdir_p dir
 upstream = "https://github.com/#{repo}"
 
 loop do
