@@ -7,7 +7,7 @@ config = Derpsy.config
 campfire_room = Derpsy.campfire_room
 repo = config[:repo]
 dir = config[:working_directory]
-upstream = "git@github.com:#{repo}.git"
+upstream = "https://github.com/#{repo}"
 
 loop do
   raw_pull = Derpsy::Retrieve.pull_request(client, repo)

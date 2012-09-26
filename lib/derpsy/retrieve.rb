@@ -21,7 +21,7 @@ module Derpsy
     def self.modelify(pull)
       id = pull.number
       hash = pull.head.sha
-      repo = pull.head.repo.ssh_url
+      repo = pull.head.repo.clone_url
       short_repo = pull.head.repo.full_name
       user = pull.user.login
       title = pull.title

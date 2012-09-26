@@ -5,8 +5,8 @@ require 'derpsy/test'
 require File.expand_path('../../config', __FILE__)
 
 $setupconf = Derpsy.config
-pull = Derpsy::Pull.new(132, "27f906b9d1e51855f085db4da6b96998d84c45f7", "git@github.com:estoner/acts_as_test_repository.git", "estoner/acts_as_test_repository", "estoner", "my awesome pull request", "https://github.com/estoner/acts_as_test_repository/pull/132")
-Derpsy::Test.setup(pull, $setupconf[:working_directory], "git@github.com:#{$setupconf[:repo]}.git" )
+pull = Derpsy::Pull.new(132, "27f906b9d1e51855f085db4da6b96998d84c45f7", "https://github.com/estoner/acts_as_test_repository.git", "estoner/acts_as_test_repository", "estoner", "my awesome pull request", "https://github.com/estoner/acts_as_test_repository/pull/132")
+Derpsy::Test.setup(pull, $setupconf[:working_directory], "https://github.com/#{$setupconf[:repo]}" )
 
 describe Derpsy::Test do
   before do

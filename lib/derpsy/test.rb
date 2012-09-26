@@ -52,7 +52,8 @@ module Derpsy
           `rm -rf deployed_app/`
           `git pull`
         else
-          `git clone #{upstream_repo} .`
+          `git init .`
+          `git pull #{upstream_repo} .`
           # msg can pass an error
         end
         `git checkout -b merge`

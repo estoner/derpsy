@@ -25,7 +25,7 @@ describe Derpsy::Retrieve do
   end
 
   it "must produce the expected repo URL" do
-    @model.repo.must_equal "git@github.com:estoner/acts_as_test_repository.git"
+    @model.repo.must_equal "https://github.com/estoner/acts_as_test_repository.git"
   end
 
 end
