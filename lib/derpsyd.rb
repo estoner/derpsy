@@ -1,4 +1,4 @@
 require 'rubygems'
 require 'daemons'
 
-Daemons.run('derpsy-runner.rb')
+Daemons.run( File.join(File.dirname(__FILE__), 'derpsy-runner.rb') )
