@@ -61,7 +61,7 @@ module Derpsy
           # msg can pass an error
         end
         `git checkout -b merge`
-        `git pull #{token}@#{pull_repo} #{branch}`
+        `git pull #{pull_repo} #{branch}`
         # plenty of merge errors here
 
         if Derpsy::Test.needs_bundle_install? repo_dir
