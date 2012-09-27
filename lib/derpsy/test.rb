@@ -37,9 +37,13 @@ module Derpsy
       end
     end 
 
-    def self.setup(pull, directory, upstream_repo, branch="master")
+    def self.setup(pull, directory, upstream, branch="master", token)
 
       Derpsy.logger.info "setting up local repo"
+
+      pull_repo = pull.repo.insert(8, "#{token}@")
+      upstream_repo = upstream.insert(8, "#{token}@")
+
       repo_dir = directory + "/repo"
       FileUtils.mkdir_p repo_dir
       
@@ -53,11 +57,11 @@ module Derpsy
           `git pull`
         else
           `git init .`
-          `git pull #{upstream_repo} .`
+          `git pull #{upstream_repo}`
           # msg can pass an error
         end
         `git checkout -b merge`
-        `git pull #{pull.repo} #{branch}`
+        `git pull #{token}@#{pull_repo} #{branch}`
         # plenty of merge errors here
 
         if Derpsy::Test.needs_bundle_install? repo_dir
