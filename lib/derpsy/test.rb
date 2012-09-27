@@ -41,8 +41,8 @@ module Derpsy
 
       Derpsy.logger.info "setting up local repo"
 
-      pull_repo = pull.repo.replace("://", "://#{token}@")
-      upstream_repo = upstream.replace("://", "://#{token}@")
+      pull_repo = pull.repos.gsub(/:\/\//, "://#{token}@")
+      upstream_repo = upstream.gsub(/:\/\//, "://#{token}@")
 
       repo_dir = directory + "/repo"
       FileUtils.mkdir_p repo_dir
