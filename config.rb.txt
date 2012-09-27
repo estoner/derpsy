@@ -6,6 +6,7 @@ module Derpsy
       :oauth_token => "123412341234",
       :repo => "somebody/some_project",
       :branch => "master",
+      :bundler_options => "",
       :test_cmd => "rake",
       :working_directory => "/home/somebody/derpsy",
       :campfire_token => "",

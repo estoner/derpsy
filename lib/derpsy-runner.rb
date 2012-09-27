@@ -10,6 +10,7 @@ repo = config[:repo]
 dir = config[:working_directory]
 branch = config[:branch]
 token = config[:oauth_token]
+token = config[:bundler_options]
 FileUtils.mkdir_p dir
 upstream = "https://github.com/#{repo}.git"
 
@@ -19,7 +20,7 @@ loop do
     pull = Derpsy::Retrieve.modelify(raw_pull)
     #pull = Derpsy::Retrieve.testable_pull_request(pulls)
     if pull
-      localrepo = Derpsy::Test.setup(pull, dir, upstream, branch, token)
+      localrepo = Derpsy::Test.setup(pull, dir, upstream, branch, token, bundler_options)
       results = Derpsy::Test.run(config[:test_cmd], dir)
       Derpsy::Test.cleanup(dir)
       interpreted_results = Derpsy::Test.interpret(results)

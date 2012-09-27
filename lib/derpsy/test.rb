@@ -37,7 +37,7 @@ module Derpsy
       end
     end 
 
-    def self.setup(pull, directory, upstream, branch, token)
+    def self.setup(pull, directory, upstream, branch, token, bundler_options)
 
       Derpsy.logger.info "setting up local repo"
 
@@ -68,8 +68,7 @@ module Derpsy
           Bundler.with_clean_env do
             # this is currently fucked
             #`RBENV_DIR="" rbenv exec bundle install`
-            `bundle install`
-            # also, make the --without flag configurable
+            `bundle install #{bundler_options}`
           end
           # should really check for errors here
         end
