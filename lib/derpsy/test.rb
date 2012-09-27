@@ -37,12 +37,12 @@ module Derpsy
       end
     end 
 
-    def self.setup(pull, directory, upstream, branch="master", token)
+    def self.setup(pull, directory, upstream, branch, token)
 
       Derpsy.logger.info "setting up local repo"
 
-      pull_repo = pull.repo.insert(8, "#{token}@")
-      upstream_repo = upstream.insert(8, "#{token}@")
+      pull_repo = pull.repo.replace("://", "://#{token}@")
+      upstream_repo = upstream.replace("://", "://#{token}@")
 
       repo_dir = directory + "/repo"
       FileUtils.mkdir_p repo_dir
