@@ -9,7 +9,7 @@ module Derpsy
     def self.pull_request(client, repo)
       Derpsy.logger.info "retrieving pull requests"
       pull_list = client.pull_requests(repo)
-      sorted_pull_list = pull_list.sort_by { |pull| pull.number }.reverse
+      sorted_pull_list = pull_list.sort_by { |pull| pull.number }
       sorted_pull_list.each do |p|
         pull = client.pull(repo, p.number)
         commits = client.pull_request_commits(repo, pull.number)
