@@ -8,6 +8,7 @@ module Derpsy
       :branch => "master",
       :bundler_options => "",
       :test_cmd => "rake",
+      :allowed_reruns => 0,
       :working_directory => "/home/somebody/derpsy",
       :campfire_token => "",
       :campfire_subdomain => "",

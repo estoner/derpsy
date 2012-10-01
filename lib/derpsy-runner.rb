@@ -7,6 +7,7 @@ client = Derpsy.client
 config = Derpsy.config
 campfire_room = Derpsy.campfire_room
 repo = config[:repo]
+allowed_reruns = config[:allowed_reruns]
 dir = config[:working_directory]
 branch = config[:branch]
 token = config[:oauth_token]
@@ -21,7 +22,7 @@ loop do
     #pull = Derpsy::Retrieve.testable_pull_request(pulls)
     if pull
       localrepo = Derpsy::Test.setup(pull, dir, upstream, branch, token, bundler_options)
-      results = Derpsy::Test.run(config[:test_cmd], dir)
+      results = Derpsy::Test.run(config[:test_cmd], dir, allowed_reruns)
       Derpsy::Test.cleanup(dir)
       interpreted_results = Derpsy::Test.interpret(results)
       message = Derpsy::Notify.build_message(interpreted_results)

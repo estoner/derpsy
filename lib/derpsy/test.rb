@@ -77,7 +77,7 @@ module Derpsy
       
     end
 
-    def self.run(test_cmd, dir)
+    def self.run(test_cmd, dir, allowed_reruns)
       dir = dir + "/repo"
 
       # consider setting status of pull to "pending"
@@ -95,7 +95,7 @@ module Derpsy
           #full_output = `ruby /Users/estoner/pixies-derpsy/fail.rb`
           #full_output = `ruby /Users/estoner/pixies-derpsy/pass.rb`
           status = $?.to_i
-          2.times do |i|
+          allowed_reruns.times do |i|
             if status != 0
               rerun = File.readlines('deployed_app/rerun.txt')[0]
               Derpsy.logger.info "tests failed on #{rerun}"
