@@ -54,7 +54,7 @@ module Derpsy
           `git checkout master`
           `git branch -D merge`
           `rm -rf deployed_app/`
-          `git pull`
+          `git pull #{upstream_repo}`
         else
           `git init .`
           `git pull #{upstream_repo}`
