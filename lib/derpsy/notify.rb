@@ -26,10 +26,10 @@ module Derpsy
       Derpsy.logger.info "post comment to GitHub"
       desc = ""
       if message[:status] == "failure"
-        desc = "on the following tests: #{message[:text]}"
+        desc = "#{message[:text]}"
       end
       begin
-        response = client.create_status(pull.short_repo, pull.hash, message[:status], options = { :description => desc})
+        response = client.create_status(pull.short_repo, pull.hash, message[:status], options = { :description => desc.slice(0..139)})
       rescue StandardError => boom
         Derpsy.logger.info "EROR when attempting to notify github: #{boom}"
       end
