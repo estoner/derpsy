@@ -39,7 +39,7 @@ module Derpsy
 
     def self.setup(pull, directory, upstream, branch, token, bundler_options)
 
-      Derpsy.logger.info "setting up local repo"
+      Derpsy.logger.info "setting up local repo to test pull # #{pull.id}"
 
       pull_repo = pull.repo.gsub(/:\/\//, "://#{token}@")
       upstream_repo = upstream.gsub(/:\/\//, "://#{token}@")
