@@ -51,9 +51,11 @@ module Derpsy
       Derpsy.logger.info "send notification to Campfire"
       room.speak "Derpsy has analyzed #{pull.user}'s pull request '#{pull.title}'..."
       if message[:status] == "success"
-        room.speak ":sparkles: :heart: It passes! :heart: :sparkles: Please code review and merge: #{pull.web_url.href}"
+        room.speak ":sparkles: :heart: It passes! :heart: :sparkles:"
+        room.speak "Please code review and merge: #{pull.web_url.href}"
       elsif message[:status] == "failure"
-        room.speak ":fire: :poop: It is borked! :poop: :fire: Failures on #{message[:text]}"
+        room.speak ":fire: :poop: It is borked! :poop: :fire:"
+        room.speak "Failures on #{message[:text]}"
         room.speak "Please do not merge, unless you have determined conclusively that this is an environment issue: #{pull.web_url.href}"
       else
         room.speak "Whoops! Derpsy had some kind of internal derp of its own. Ask Evan to fix that."
