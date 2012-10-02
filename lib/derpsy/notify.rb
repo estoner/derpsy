@@ -37,6 +37,16 @@ module Derpsy
       #   if failed, maybe close request?
     end
 
+    def self.github_status(client, pull, status, description)
+      hash = pull.head.sha
+      short_repo = pull.head.repo.full_name
+      begin
+        response = client.create_status(short_repo, hash, status, options = { :description => desc.slice(0..139)})
+      rescue StandardError => boom
+        Derpsy.logger.info "EROR when attempting to notify github: #{boom}"
+      end
+    end
+
     def self.campfire(pull, message, config, room)
       Derpsy.logger.info "send notification to Campfire"
       room.speak "Derpsy has analyzed #{pull.user}'s pull request '#{pull.title}'..."

@@ -16,7 +16,7 @@ FileUtils.mkdir_p dir
 upstream = "https://github.com/#{repo}.git"
 
 loop do
-  raw_pull = Derpsy::Retrieve.pull_request(client, repo)
+  raw_pull = Derpsy::Retrieve.pull_request(client, repo, campfire_room)
   if raw_pull
     pull = Derpsy::Retrieve.modelify(raw_pull)
     #pull = Derpsy::Retrieve.testable_pull_request(pulls)
