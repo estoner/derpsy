@@ -24,10 +24,10 @@ module Derpsy
             Derpsy.logger.info "merge conflict with master, failing"
             Derpsy::Notify.github_status(client, pull, "failure", "Merge conflict with master. Please pull upstream master, resolve conflicts, and recommit.")
             campfire_room.speak "Hey, #{pull.user.login}: :sob: Pull Request ##{pull.number} had a merge conflict with latest master. Please pull upstream master, resolve the conflicts, and re-push."
-          elsif pull.base.sha != last_master_commit
-            Derpsy.logger.info "PR is not based on latest master, failing"
-            Derpsy::Notify.github_status(client, pull, "failure", "Pull request is not based on latest master.")
-            campfire_room.speak "Hey, #{pull.user.login}: :unamused: Pull Request ##{pull.number} is not based on latest master, so cannot be tested. Please pull upstream master, verify the merge is good, and re-push."
+          #elsif pull.base.sha != last_master_commit
+            #Derpsy.logger.info "PR is not based on latest master, failing"
+            #Derpsy::Notify.github_status(client, pull, "failure", "Pull request is not based on latest master.")
+            #campfire_room.speak "Hey, #{pull.user.login}: :unamused: Pull Request ##{pull.number} is not based on latest master, so cannot be tested. Please pull upstream master, verify the merge is good, and re-push."
           else
             Derpsy.logger.info "Found good pull request, setting status to 'pending'"
             Derpsy::Notify.github_status(client, pull, "pending", "Derpsy has begun testing this pull request.")
