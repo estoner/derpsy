@@ -41,7 +41,7 @@ module Derpsy
       hash = pull.head.sha
       short_repo = pull.head.repo.full_name
       begin
-        response = client.create_status(short_repo, hash, status, options = { :description => desc.slice(0..139)})
+        response = client.create_status(short_repo, hash, status, options = { :description => description.slice(0..139)})
       rescue StandardError => boom
         Derpsy.logger.info "EROR when attempting to notify github: #{boom}"
       end
