@@ -44,7 +44,7 @@ module Derpsy
         room.speak ":sparkles: :heart: It passes! :heart: :sparkles: Please code review and merge: #{pull.web_url.href}"
       elsif message[:status] == "failure"
         room.speak ":fire: :poop: It is borked! :poop: :fire: Failures on #{message[:text]}"
-        room.speak "Please do not merge, unless you have determined conclusively that this is an environment issue."
+        room.speak "Please do not merge, unless you have determined conclusively that this is an environment issue: #{pull.web_url.href}"
       else
         room.speak "Whoops! Derpsy had some kind of internal derp of its own. Ask Evan to fix that."
       end
