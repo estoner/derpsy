@@ -11,7 +11,9 @@ require File.expand_path('../derpsy/notify', __FILE__)
 module Derpsy
   
   def self.logger
-    @@logger = Logger.new(Derpsy.config[:working_directory] + "/derpsy.log")
+    logger = Logger.new(Derpsy.config[:working_directory] + "/derpsy.log")
+    logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+    @@logger = logger
   end
   
   def self.client
