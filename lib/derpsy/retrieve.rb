@@ -30,7 +30,7 @@ module Derpsy
             #campfire_room.speak "Hey, #{pull.user.login}: :unamused: Pull Request ##{pull.number} is not based on latest master, so cannot be tested. Please pull upstream master, verify the merge is good, and re-push."
           else
             Derpsy.logger.info "Found good pull request, setting status to 'pending'"
-            Derpsy::Notify.github_status(client, pull, "pending", "Derpsy has begun testing this pull request.")
+            Derpsy::Notify.github_status(client, pull, "pending", "Derpsy began testing this pull request at #{Time.now.strftime('%I:%M:%S%p')}.")
             return pull
           end
         end
