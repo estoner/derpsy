@@ -30,7 +30,7 @@ module Derpsy
         Derpsy.logger.debug "comments come from repo #{repo}"
         comments = client.issue_comments(repo, pull.number).reverse
         comments.each do |comment|
-          if comment.body.include? "please retest"
+          if comment.body.downcase.include? "please retest"
             retest_comment = comment
             break
           end
