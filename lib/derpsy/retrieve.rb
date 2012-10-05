@@ -14,24 +14,63 @@ module Derpsy
       sorted_pull_list.each do |p|
         pull = client.pull(repo, p.number)
         commits = client.pull_request_commits(repo, pull.number)
+        pull_repo = pull.head.repo.full_name
+        
         last_status = ""
-        last_commit_statuses = client.statuses(pull.head.repo.full_name, commits.last.sha)
+        Derpsy.logger.debug "SHA: #{commits.last.sha}"
+        Derpsy.logger.debug "LCS repo is: #{pull_repo}"
+        last_commit_statuses = client.statuses(pull_repo, commits.last.sha)
         if last_commit_statuses[0]
+          Derpsy.logger.debug "LCS: #{last_commit_statuses[0].id.to_s}"
           last_status = last_commit_statuses[0].state
         end
-        unless last_status == "failure" or last_status == "success"
-          if !pull.mergeable
-            Derpsy.logger.info "merge conflict with master, failing"
-            Derpsy::Notify.github_status(client, pull, "failure", "Merge conflict with master. Please pull upstream master, resolve conflicts, and recommit.")
-            campfire_room.speak "Hey, #{pull.user.login}: :sob: Pull Request ##{pull.number} had a merge conflict with latest master. Please pull upstream master, resolve the conflicts, and re-push."
-          #elsif pull.base.sha != last_master_commit
-            #Derpsy.logger.info "PR is not based on latest master, failing"
-            #Derpsy::Notify.github_status(client, pull, "failure", "Pull request is not based on latest master.")
-            #campfire_room.speak "Hey, #{pull.user.login}: :unamused: Pull Request ##{pull.number} is not based on latest master, so cannot be tested. Please pull upstream master, verify the merge is good, and re-push."
+
+        retest = false
+        retest_comment = nil
+        Derpsy.logger.debug "comments come from repo #{repo}"
+        comments = client.issue_comments(repo, pull.number).reverse
+        comments.each do |comment|
+          if comment.body.include? "please retest"
+            retest_comment = comment
+            break
+          end
+        end
+        if retest_comment && retest_comment.created_at > last_commit_statuses[0].created_at
+          retest = true
+        end
+
+        Derpsy.logger.debug "pull: #{pull.number}"
+        Derpsy.logger.debug "last_status: #{last_status}"
+        Derpsy.logger.debug "retest: #{retest.to_s}"
+        Derpsy.logger.debug "retest_comment: #{retest_comment}"
+        Derpsy.logger.debug "mergeable: #{pull.mergeable}"
+        if retest_comment
+          Derpsy.logger.debug "comment_created: #{retest_comment.created_at}"
+        end
+        if last_commit_statuses.length != 0
+          Derpsy.logger.debug "status_created: #{last_commit_statuses[0].created_at}"
+        end
+        unless last_status == "success"
+          if last_status == "failure"
+            if pull.mergeable && retest
+              Derpsy.logger.info "Found retest request, setting status to 'pending'"
+              Derpsy::Notify.github_status(client, pull, "pending", "Derpsy began testing this pull request at #{Time.now.strftime('%I:%M:%S%p')}.")
+              return pull
+            end
           else
-            Derpsy.logger.info "Found good pull request, setting status to 'pending'"
-            Derpsy::Notify.github_status(client, pull, "pending", "Derpsy began testing this pull request at #{Time.now.strftime('%I:%M:%S%p')}.")
-            return pull
+            if !pull.mergeable
+              Derpsy.logger.info "merge conflict with master, failing"
+              Derpsy::Notify.github_status(client, pull, "failure", "Merge conflict with master. Please pull upstream master, resolve conflicts, and recommit.")
+              campfire_room.speak "Hey, #{pull.user.login}: :sob: Pull Request ##{pull.number} had a merge conflict with latest master. Please pull upstream master, resolve the conflicts, and re-push."
+            #elsif pull.base.sha != last_master_commit
+              #Derpsy.logger.info "PR is not based on latest master, failing"
+              #Derpsy::Notify.github_status(client, pull, "failure", "Pull request is not based on latest master.")
+              #campfire_room.speak "Hey, #{pull.user.login}: :unamused: Pull Request ##{pull.number} is not based on latest master, so cannot be tested. Please pull upstream master, verify the merge is good, and re-push."
+            else
+              Derpsy.logger.info "Found good pull request, setting status to 'pending'"
+              Derpsy::Notify.github_status(client, pull, "pending", "Derpsy began testing this pull request at #{Time.now.strftime('%I:%M:%S%p')}.")
+              return pull
+            end
           end
         end
       end
@@ -43,6 +82,7 @@ module Derpsy
       hash = pull.head.sha
       repo = pull.head.repo.clone_url
       short_repo = pull.head.repo.full_name
+      Derpsy.logger.debug "in modelify, short_repo is #{short_repo}"
       user = pull.user.login
       title = pull.title
       web_url = pull._links.html

@@ -4,14 +4,6 @@ module Derpsy
 
     BUNDLER_VARS = %w(BUNDLE_GEMFILE RUBYOPT BUNDLE_BIN_PATH)
 
-    def self.with_clean_env
-      bundled_env = ENV.to_hash
-      BUNDLER_VARS.each{ |var| ENV.delete(var) }
-      yield
-    ensure
-      ENV.replace(bundled_env.to_hash)
-    end
-  
     def self.is_valid_repo?
       msg = IO.popen("git rev-parse --git-dir").readlines.first
       if msg == ".git\n"
@@ -141,6 +133,7 @@ module Derpsy
       repo_dir = directory + "/repo"
       # Derpsy.logger.info "cleaning local repo"
       Dir.chdir repo_dir do
+        `git reset --hard HEAD`
         `git checkout master`
         `git branch -D merge`
         `rm -rf deployed_app`

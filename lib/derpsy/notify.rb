@@ -3,7 +3,7 @@ module Derpsy
   module Notify
 
     def self.build_message(results)
-      Derpsy.logger.info "build the message"
+      Derpsy.logger.info "building the message"
 
       message = { :status => "success", :text => "All tests passed!" }
 
@@ -23,15 +23,16 @@ module Derpsy
     end
 
     def self.github(pull, message, config, client)
-      Derpsy.logger.info "post comment to GitHub"
+      Derpsy.logger.info "posting comment to GitHub"
       desc = ""
       if message[:status] == "failure"
         desc = "#{message[:text]}"
       end
       begin
+        Derpsy.logger.debug "in github, short_repo is #{pull.short_repo}"
         response = client.create_status(pull.short_repo, pull.hash, message[:status], options = { :description => desc.slice(0..139)})
       rescue StandardError => boom
-        Derpsy.logger.info "EROR when attempting to notify github: #{boom}"
+        Derpsy.logger.error "ERROR when attempting to notify github: #{boom}"
       end
       # check response to make sure it worked
       #   if failed, maybe close request?
@@ -40,15 +41,16 @@ module Derpsy
     def self.github_status(client, pull, status, description)
       hash = pull.head.sha
       short_repo = pull.head.repo.full_name
+      Derpsy.logger.debug "in github_status, short_repo is #{short_repo}"
       begin
         response = client.create_status(short_repo, hash, status, options = { :description => description.slice(0..139)})
       rescue StandardError => boom
-        Derpsy.logger.info "EROR when attempting to notify github: #{boom}"
+        Derpsy.logger.error "ERROR when attempting to notify github: #{boom}"
       end
     end
 
     def self.campfire(pull, message, config, room)
-      Derpsy.logger.info "send notification to Campfire"
+      Derpsy.logger.info "sending notification to Campfire"
       room.speak "Derpsy has analyzed #{pull.user}'s pull request '#{pull.title}'..."
       if message[:status] == "success"
         room.speak ":sparkles: :heart: It passes! :heart: :sparkles:"

@@ -16,6 +16,7 @@ FileUtils.mkdir_p dir
 upstream = "https://github.com/#{repo}.git"
 
 loop do
+  Derpsy.logger.debug "*************** starting loop ***************" 
   raw_pull = Derpsy::Retrieve.pull_request(client, repo, campfire_room)
   if raw_pull
     pull = Derpsy::Retrieve.modelify(raw_pull)
@@ -30,5 +31,6 @@ loop do
       Derpsy::Notify.campfire(pull, message, config, campfire_room)
     end
   end
+  Derpsy.logger.debug "*************** ending loop ***************" 
   sleep 15
 end

@@ -13,6 +13,7 @@ module Derpsy
   def self.logger
     logger = Logger.new(Derpsy.config[:working_directory] + "/derpsy.log")
     logger.datetime_format = "%Y-%m-%d %H:%M:%S"
+    logger.level = Logger::INFO
     @@logger = logger
   end
   
