@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
 gem "rake"
+gem "bundler", "~> 1.2.1"
 gem "daemons"
 gem "octokit"
 gem "awesome_print"

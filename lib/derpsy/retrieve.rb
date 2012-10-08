@@ -27,16 +27,18 @@ module Derpsy
 
         retest = false
         retest_comment = nil
-        Derpsy.logger.debug "comments come from repo #{repo}"
-        comments = client.issue_comments(repo, pull.number).reverse
-        comments.each do |comment|
-          if comment.body.downcase.include? "please retest"
-            retest_comment = comment
-            break
+	if last_status == "failure"
+          Derpsy.logger.debug "comments come from repo #{repo}"
+          comments = client.issue_comments(repo, pull.number).reverse
+          comments.each do |comment|
+            if comment.body.downcase.include? "please retest"
+              retest_comment = comment
+              break
+            end
           end
-        end
-        if retest_comment && retest_comment.created_at > last_commit_statuses[0].created_at
-          retest = true
+          if retest_comment && retest_comment.created_at > last_commit_statuses[0].created_at
+            retest = true
+          end
         end
 
         Derpsy.logger.debug "pull: #{pull.number}"
