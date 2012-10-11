@@ -10,7 +10,7 @@ repo = config[:repo]
 allowed_reruns = config[:allowed_reruns]
 dir = config[:working_directory]
 branch = config[:branch]
-token = config[:oauth_token]
+token = config[:github_token]
 bundler_options = config[:bundler_options]
 FileUtils.mkdir_p dir
 upstream = "https://github.com/#{repo}.git"

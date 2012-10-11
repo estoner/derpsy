@@ -3,7 +3,7 @@ module Derpsy
     {
       :login => "joe_username", 
       :password => "12345",
-      :oauth_token => "123412341234",
+      :github_token => "123412341234",
       :repo => "somebody/some_project",
       :branch => "master",
       :bundler_options => "",

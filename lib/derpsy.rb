@@ -18,7 +18,7 @@ module Derpsy
   end
   
   def self.client
-    Octokit::Client.new :login => Derpsy.config[:login], :oauth_token => Derpsy.config[:oauth_token]
+    Octokit::Client.new :login => Derpsy.config[:login], :oauth_token => Derpsy.config[:github_token]
   end
 
   def self.campfire_room

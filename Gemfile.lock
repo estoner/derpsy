@@ -10,6 +10,7 @@ GEM
     faraday_middleware (0.8.8)
       faraday (>= 0.7.4, < 0.9)
     hashie (1.2.0)
+    highline (1.6.15)
     http_parser.rb (0.5.3)
     json (1.7.5)
     mime-types (1.19)
@@ -47,6 +48,7 @@ DEPENDENCIES
   bundler (~> 1.2.1)
   daemons
   hashie
+  highline
   json
   minitest (~> 2.11.2)
   octokit
