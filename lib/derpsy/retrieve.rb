@@ -8,18 +8,28 @@ module Derpsy
     
     def self.pull_request(client, repo, campfire_room)
       Derpsy.logger.info "retrieving pull requests"
-      pull_list = client.pull_requests(repo)
-      last_master_commit = client.commits(repo, "master").last.sha
+      begin
+        pull_list = client.pull_requests(repo)
+      rescue e
+        Derpsy.logger.error e
+        next
+      end
       sorted_pull_list = pull_list.sort_by { |pull| pull.number }
       sorted_pull_list.each do |p|
-        pull = client.pull(repo, p.number)
-        commits = client.pull_request_commits(repo, pull.number)
-        pull_repo = pull.head.repo.full_name
-        
+        begin
+          pull = client.pull(repo, p.number)
+          commits = client.pull_request_commits(repo, pull.number)
+          pull_repo = pull.head.repo.full_name
+          last_commit_statuses = client.statuses(pull_repo, commits.last.sha)
+        rescue e
+          Derpsy.logger.error e
+          next
+        end
+
+
         last_status = ""
         Derpsy.logger.debug "SHA: #{commits.last.sha}"
         Derpsy.logger.debug "LCS repo is: #{pull_repo}"
-        last_commit_statuses = client.statuses(pull_repo, commits.last.sha)
         if last_commit_statuses[0]
           Derpsy.logger.debug "LCS: #{last_commit_statuses[0].id.to_s}"
           last_status = last_commit_statuses[0].state
