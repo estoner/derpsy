@@ -46,13 +46,16 @@ module Derpsy
           `git checkout master`
           `git branch -D merge`
           `rm -rf deployed_app/`
+          Derpsy.logger.info "pulling #{upstream_repo} onto master"
           `git pull #{upstream_repo}`
         else
           `git init .`
+          Derpsy.logger.info "pulling #{upstream_repo} onto initialized repo"
           `git pull #{upstream_repo}`
           # msg can pass an error
         end
         `git checkout -b merge`
+        Derpsy.logger.info "pulling #{pull_repo} onto master"
         `git pull #{pull_repo} #{branch}`
         # plenty of merge errors here
 
