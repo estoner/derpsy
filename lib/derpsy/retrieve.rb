@@ -98,9 +98,9 @@ module Derpsy
       user = pull.user.login
       title = pull.title
       web_url = pull._links.html
-      # branch = pull.head.ref
-      # should check what branch to merge onto
-      Derpsy::Pull.new id, hash, repo, short_repo, user, title, web_url
+      branch = pull.head.ref
+      base = pull.base.ref
+      Derpsy::Pull.new id, hash, repo, short_repo, user, title, web_url, branch, base
     end
 
   end

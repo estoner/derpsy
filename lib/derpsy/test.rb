@@ -38,7 +38,7 @@ module Derpsy
 
       repo_dir = directory + "/repo"
       FileUtils.mkdir_p repo_dir
-      
+
       Dir.chdir repo_dir do
 
         if Derpsy::Test.is_valid_repo?
@@ -55,8 +55,8 @@ module Derpsy
           # msg can pass an error
         end
         `git checkout -b merge`
-        Derpsy.logger.info "pulling #{pull_repo} onto master"
-        `git pull #{pull_repo} #{branch}`
+        Derpsy.logger.info "pulling #{pull_repo} #{pull.branch} onto master"
+        `git pull #{pull_repo} #{pull.branch}`
         # plenty of merge errors here
 
         if Derpsy::Test.needs_bundle_install? repo_dir
@@ -69,7 +69,7 @@ module Derpsy
         end
 
       end
-      
+
     end
 
     def self.run(test_cmd, dir, allowed_reruns)
@@ -114,7 +114,7 @@ module Derpsy
 
     def self.interpret(data)
       Derpsy.logger.info "interpreting results"
-      
+
       results = { :success => false, :output => data[:output] }
 
       # figure out what the F the test results mean

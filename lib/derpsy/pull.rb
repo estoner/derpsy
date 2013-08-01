@@ -2,7 +2,7 @@ module Derpsy
   
   class Pull
     
-    def initialize(id, hash, repo, short_repo, user, title, web_url)
+    def initialize(id, hash, repo, short_repo, user, title, web_url, branch, base)
       @id = id
       @hash = hash
       @repo = repo
@@ -10,6 +10,8 @@ module Derpsy
       @user = user
       @title = title
       @web_url = web_url
+      @branch = branch
+      @base = base
     end
 
     attr_reader  :id,
@@ -18,7 +20,9 @@ module Derpsy
                  :short_repo,
                  :user,
                  :title,
-                 :web_url
+                 :web_url,
+                 :branch,
+                 :base
 
   end
 
