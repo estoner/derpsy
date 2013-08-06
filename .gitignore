@@ -9,3 +9,4 @@ rerun.txt
 *.orig
 *.swp
 *.log
+bin/*

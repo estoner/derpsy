@@ -46,6 +46,7 @@ module Derpsy
           `git checkout master`
           `git branch -D merge`
           `rm -rf deployed_app/`
+          `rm rerun.txt`
           Derpsy.logger.info "pulling #{upstream_repo} onto master"
           `git pull #{upstream_repo}`
         else
